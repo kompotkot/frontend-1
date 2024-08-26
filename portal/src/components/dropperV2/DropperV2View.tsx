@@ -19,6 +19,7 @@ import { chainByChainId } from "../../contexts/Web3Context";
 import { Entity } from "../../types";
 import { AiOutlineSave } from "react-icons/ai";
 import { useJournal } from "../../hooks/useJournal";
+import { RegisteredContract } from "./DropperV2RegisteredContracts";
 
 const DropperV2View = () => {
   const router = useRouter();
@@ -34,6 +35,9 @@ const DropperV2View = () => {
   const dropperContracts = useJournal({ tags: ["dropperContracts"] });
 
   const [isContractRegistered, setIsContractRegistered] = useState(false);
+  const [selectedContract, setSelectedContract] = useState<RegisteredContract | undefined>(
+    undefined,
+  );
 
   const handleClick = (dropId: string, metadata: unknown) => {
     setSelected(Number(dropId));
@@ -157,6 +161,8 @@ const DropperV2View = () => {
               addRecentAddress={addRecentAddress}
               isContractRegistered={isContractRegistered}
               setIsContractRegistered={setIsContractRegistered}
+              selectedContract={selectedContract}
+              setSelectedContract={setSelectedContract}
             />
             <Flex gap="40px" position="relative">
               {contractState.data && (
@@ -179,6 +185,7 @@ const DropperV2View = () => {
                   metadata={claimMetadata}
                   isContractRegistered={isContractRegistered}
                   totalDrops={totalDrops}
+                  selectedContract={selectedContract}
                 />
               )}
             </Flex>

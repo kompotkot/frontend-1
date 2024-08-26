@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import DropperV2RegisterContract from "./DropperV2RegisterContractForm";
 import Web3Address from "../entity/Web3Address";
+import DropperV2RegisteredContracts, { RegisteredContract } from "./DropperV2RegisteredContracts";
 const dropperAbi = require("../../web3/abi/DropperV2.json");
 
 const CONNECTION_ERRORS: WalletStatesInterface = {
@@ -45,11 +46,15 @@ export interface WalletStatesInterface {
 const DropperV2ContractView = ({
   address,
   addRecentAddress,
+  selectedContract,
+  setSelectedContract,
   isContractRegistered,
   setIsContractRegistered,
 }: {
   address: string;
   addRecentAddress: (address: string, fields: Record<string, string>) => void;
+  selectedContract: RegisteredContract | undefined;
+  setSelectedContract: (arg0: RegisteredContract) => void;
   isContractRegistered: boolean;
   setIsContractRegistered: (arg0: boolean) => void;
 }) => {
@@ -111,9 +116,15 @@ const DropperV2ContractView = ({
       method: "GET",
       url: `https://engineapi.moonstream.to/metatx/contracts`,
     }).then((res) => {
+      const sortedData = res.data.sort((a: { created_at: string }, b: { created_at: string }) => {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
       return {
         ...res.data,
-        contractData: res.data.find(
+        contractData: sortedData.find(
+          (contract: { address: string }) => contract.address === address,
+        ),
+        contracts: sortedData.filter(
           (contract: { address: string }) => contract.address === address,
         ),
       };
@@ -123,6 +134,9 @@ const DropperV2ContractView = ({
   const contractsQuery = useQuery(["metatxContracts"], getContracts, {
     onSuccess: (data) => {
       setIsContractRegistered(data.contractData?.address);
+      if (!selectedContract) {
+        setSelectedContract(data.contracts[0]);
+      }
     },
     onError: (e) => {
       console.log(e);
@@ -153,23 +167,23 @@ const DropperV2ContractView = ({
   return (
     <>
       <Flex bg="#2d2d2d" w="1240px" borderRadius="20px" p="30px" direction="column" gap="20px">
-        {contractsQuery.data?.contractData && (
-          <Text variant="title2">{contractsQuery.data.contractData.title}</Text>
-        )}
+        {selectedContract && <Text variant="title2">{selectedContract.title}</Text>}
         <Flex gap="10px" justifyContent={"space-between"}>
+          {contractsQuery.data && (
+            <DropperV2RegisteredContracts
+              contracts={contractsQuery.data.contracts}
+              selectedContract={selectedContract}
+              setSelectedContract={setSelectedContract}
+            />
+          )}
           <Flex direction="column" gap="20px">
             <Flex gap="20px" flex="1" maxW={"340px"}>
-              {contractsQuery.data?.contractData?.image_uri && (
-                <Image
-                  w="140px"
-                  h="140px"
-                  src={contractsQuery.data.contractData.image_uri}
-                  alt="qq"
-                />
+              {selectedContract?.image_uri && (
+                <Image w="140px" h="140px" src={selectedContract.image_uri} alt="qq" />
               )}
-              {contractsQuery.data?.contractData && (
-                <Text color={contractsQuery.data.contractData.description ? "white" : "#BBBBBB"}>
-                  {contractsQuery.data.contractData.description ?? "no description provided"}
+              {selectedContract && (
+                <Text color={selectedContract.description ? "white" : "#BBBBBB"}>
+                  {selectedContract.description ?? "no description provided"}
                 </Text>
               )}
             </Flex>

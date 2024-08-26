@@ -29,13 +29,14 @@ import {
 import RadioButtonSelected from "../icons/RadioButtonSelected";
 import RadioButtonNotSelected from "../icons/RadioButtonNotSelected";
 import UnavailableWaggleServer from "./UnavailableWaggleServer";
+import { RegisteredContract } from "./DropperV2RegisteredContracts";
 
 const DropperV2ClaimantsUpload = ({
-  contractAddress,
   dropAuthorization,
+  selectedContract,
 }: {
-  contractAddress: string;
   dropAuthorization: { poolId: string; terminusAddress: string };
+  selectedContract: RegisteredContract;
 }) => {
   const toast = useMoonToast();
 
@@ -158,7 +159,7 @@ const DropperV2ClaimantsUpload = ({
       url,
       data: {
         chain_id: chainId,
-        dropper: contractAddress,
+        registered_contract_id: selectedContract.id,
         ttl_days: Number(ttl),
         sensible: false,
         requests,
@@ -171,7 +172,7 @@ const DropperV2ClaimantsUpload = ({
       method: "POST",
       url: "https://engineapi.moonstream.to/metatx/requests",
       data: {
-        contract_address: contractAddress,
+        contract_id: selectedContract.id,
         ttl_days: ttl,
         specifications,
       },
