@@ -224,6 +224,8 @@ const DropperV2View = () => {
           <Flex gap="35px">
             {contractsQuery.data.map((c: any) => (
               <DropperV2ContractCard
+                contract={c}
+                setSelectedContract={setSelectedContract}
                 key={c.id}
                 title={c.title}
                 address={c.address}

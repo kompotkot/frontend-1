@@ -2,17 +2,22 @@ import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import http from "../../utils/httpMoonstream";
+import { RegisteredContract } from "./DropperV2RegisteredContracts";
 
 const DropperV2ContractCard = ({
   title,
   uri,
   address,
   id,
+  contract,
+  setSelectedContract,
 }: {
   title: string;
   uri: string;
   address: string;
   id: string;
+  contract: RegisteredContract;
+  setSelectedContract: (arg0: RegisteredContract) => void;
 }) => {
   const deleteContract = useMutation(async () => {
     const res = await http({
@@ -28,6 +33,7 @@ const DropperV2ContractCard = ({
   const router = useRouter();
 
   const handleClick = () => {
+    setSelectedContract(contract);
     router.push({
       pathname: `/portal/dropperV2`,
       query: {
