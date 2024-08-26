@@ -1,6 +1,6 @@
 import { SearchIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { Flex, Grid, GridItem, IconButton, Input, Spinner, Text } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Web3Context from "../../contexts/Web3Context/context";
 import useMoonToast from "../../hooks/useMoonToast";
 import http from "../../utils/httpMoonstream";
@@ -32,6 +32,11 @@ const DropperV2ClaimsView = ({
     message: string;
   };
 
+  useEffect(() => {
+    setSearchResult({ isSearching: false });
+    setRequestsFound([]);
+  }, [selectedContract?.id]);
+
   const searchForAddress = async (searchAddress: string) => {
     setSearchResult((prev) => {
       return { ...prev, isSearching: true };
@@ -40,7 +45,7 @@ const DropperV2ClaimsView = ({
     http({
       method: "GET",
       url: `https://engineapi.moonstream.to/metatx/requests`,
-      params: { contract_address: address, caller: searchAddress },
+      params: { contract_id: selectedContract?.id, caller: searchAddress },
     })
       .then((res: any) => {
         if (!res.data?.length) {
