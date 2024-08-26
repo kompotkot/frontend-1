@@ -1,32 +1,23 @@
 import { SearchIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import {
-  Flex,
-  Grid,
-  GridItem,
-  IconButton,
-  Input,
-  Link,
-  Spinner,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, IconButton, Input, Spinner, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { useMutation, useQuery } from "react-query";
 import Web3Context from "../../contexts/Web3Context/context";
 import useMoonToast from "../../hooks/useMoonToast";
 import http from "../../utils/httpMoonstream";
 import DropperV2ClaimantsUpload from "./DropperV2ClaimantsUpload";
-import axios from "axios";
-import RouterLink from "next/link";
+
+import { RegisteredContract } from "./DropperV2RegisteredContracts";
 
 const DropperV2ClaimsView = ({
   address,
   isContractRegistered,
   dropAuthorization,
+  selectedContract,
 }: {
   address: string;
   isContractRegistered: boolean;
   dropAuthorization: { poolId: string; terminusAddress: string };
+  selectedContract: RegisteredContract | undefined;
 }) => {
   const [searchAddress, setSearchAddress] = useState("");
   const [requestsFound, setRequestsFound] = useState([]);
@@ -171,7 +162,12 @@ const DropperV2ClaimsView = ({
           ))}
         </Grid>
       )}
-      <DropperV2ClaimantsUpload dropAuthorization={dropAuthorization} contractAddress={address} />
+      {selectedContract && (
+        <DropperV2ClaimantsUpload
+          dropAuthorization={dropAuthorization}
+          selectedContract={selectedContract}
+        />
+      )}
 
       {/*<RouterLink href={`/portal/dropperV2/claim/?dropId=${15}&dropperAddress=${address}`}>*/}
       {/*  check claims*/}

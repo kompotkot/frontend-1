@@ -17,6 +17,7 @@ import DropperV2EditDrop from "./DropperV2EditDrop";
 import DropperV2ClaimsView from "./DropperV2ClaimsView";
 import { MockTerminus } from "../../web3/contracts/types/MockTerminus";
 import useMoonToast from "../../hooks/useMoonToast";
+import { RegisteredContract } from "./DropperV2RegisteredContracts";
 
 const dropperAbi = require("../../web3/abi/DropperV2.json");
 const terminusAbi = require("../../web3/abi/MockTerminus.json");
@@ -37,6 +38,7 @@ const DropperV2DropView = ({
   metadata,
   isContractRegistered,
   totalDrops,
+  selectedContract,
 }: {
   address: string;
   dropId: number;
@@ -44,6 +46,7 @@ const DropperV2DropView = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata: any;
   totalDrops: number;
+  selectedContract: RegisteredContract | undefined;
 }) => {
   const { chainId, web3 } = useContext(Web3Context);
 
@@ -215,6 +218,7 @@ const DropperV2DropView = ({
               address={address}
               dropAuthorization={dropState.data?.dropAuthorization}
               isContractRegistered={isContractRegistered}
+              selectedContract={selectedContract}
             />
           )}
 
