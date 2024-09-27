@@ -5,12 +5,13 @@ import useUser from "../../contexts/UserContext";
 
 import queryCacheProps from "../../hooks/hookCommon";
 import useMoonToast from "../../hooks/useMoonToast";
-import { SubscriptionsService } from "../../services";
+import { SubscriptionsService, DatabaseService } from "../../services";
 import http from "../../utils/httpMoonstream";
 
 type AnalyticsContextType = {
   addresses: any;
   queries: any;
+  databases: any;
   isShowContracts: boolean;
   setIsShowContracts: (arg0: boolean) => void;
   filter: string;
@@ -157,11 +158,24 @@ export const AnalyticsProvider = ({ children }: { children: React.ReactNode }) =
     ...queryCacheProps,
   });
 
+  const databases = useQuery(
+    ["databases"],
+    () => {
+      return DatabaseService.getCustomers().then((res) => res.data);
+    },
+    {
+      ...queryCacheProps,
+      enabled: !!user,
+    },
+  );
+
+
   const queries = undefined;
 
   const value = {
     addresses,
     queries,
+    databases,
     isShowContracts,
     setIsShowContracts,
     filter,

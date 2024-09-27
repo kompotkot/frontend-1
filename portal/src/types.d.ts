@@ -153,3 +153,25 @@ interface User {
   verified: boolean;
   web3_address: string | null;
 }
+
+
+interface Credential {
+  username: string;
+  passwd_resource_id: string | null;
+  passwd: string | null;
+}
+
+interface Instance {
+  id: number;
+  name: string;
+  ip: string;
+  is_running: boolean;
+  credentials: Credential[];
+}
+
+interface Database {
+  id: string;
+  name: string;
+  normalized_name: string;
+  instances: Instance[];
+}

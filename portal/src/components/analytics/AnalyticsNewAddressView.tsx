@@ -14,8 +14,11 @@ import {
   Spinner,
   Text,
   Textarea,
+  Select,
+  Tooltip,
 } from "@chakra-ui/react";
 import { AWS_ASSETS_PATH_CF, ChainName, getChainImage } from "../../constants";
+import { Database } from "../../types";
 import useAnalytics from "../../contexts/AnalyticsContext";
 import Web3Context from "../../contexts/Web3Context/context";
 import useMoonToast from "../../hooks/useMoonToast";
@@ -26,7 +29,7 @@ import AnalyticsAddressTags from "./AnalyticsAddressTags";
 const metamaskIcon = `${AWS_ASSETS_PATH_CF}/icons/metamask.png`;
 
 const AnalyticsNewAddressView = () => {
-  const { addresses, setIsCreatingAddress, setSelectedAddressId, blockchains } = useAnalytics();
+  const { addresses, setIsCreatingAddress, setSelectedAddressId, blockchains, databases } = useAnalytics();
   const [address, setAddress] = useState("");
   const [isConnectingMetamask, setIsConnectingMetamask] = useState(false);
   const { account, onConnectWalletClick, web3 } = useContext(Web3Context);
@@ -38,6 +41,7 @@ const AnalyticsNewAddressView = () => {
   const [chainName, setChainName] = useState("");
   const [showInvalid, setShowInvalid] = useState(false);
   const [abi, setABI] = useState("");
+  const [selectedDatabase, setSelectedDatabase] = useState("");
 
   const loadFromMetamask = () => {
     if (account) {
@@ -105,6 +109,8 @@ const AnalyticsNewAddressView = () => {
           label: title,
           color: "#000000",
           abi: JSONForSave,
+          // if selectedDatabase is "" then NULL will be sent to the backend
+          customerId: selectedDatabase === "shared" ? undefined : selectedDatabase,
         });
       } catch (e: any) {
         toast(e.message, "error", 7000);
@@ -180,6 +186,64 @@ const AnalyticsNewAddressView = () => {
             />
           )}
         </Flex>
+
+
+
+        <Flex direction="column" gap="10px" w="100%">
+          <Text variant="label">Select Analytics Database</Text>
+          <Flex
+            wrap="wrap"
+            gap="10px"
+            w="fit-content"
+            pb="5px"
+          >
+            {/* Tooltip around Select so it doesn't interfere with the layout */}
+            <Tooltip
+              label="This is a shared database accessible via API using predefined queries. You can perform certain SQL queries without direct database access."
+              aria-label="Shared database tooltip"
+              hasArrow
+              placement="right-end"
+            >
+              <Select
+                value={selectedDatabase} // This should be the state that holds the selected value
+                onChange={(e) => setSelectedDatabase(e.target.value)}
+                borderRadius="10px"
+                bg={selectedDatabase ? "#FFF" : "#232323"}
+                color={selectedDatabase ? "#1A1D22" : "#FFF"}
+              >
+                {/* Free shared database option */}
+                <option
+                  key="shared"
+                  value="shared"
+                  style={{ color: "#000", backgroundColor: selectedDatabase === "" ? "#FFF" : "#232323" }}
+                >
+                  Free shared database (API access only)
+                </option>
+
+                {/* Ensure databases.data is defined before mapping */}
+                {databases?.data && databases.data.length > 0 ? (
+                  databases.data.map((db: Database) => (
+                    <option
+                      key={db.id}
+                      value={db.id}
+                      style={{
+                        color: "#000", // dark font color for dropdown options
+                        backgroundColor: selectedDatabase === db.id ? "#FFF" : "#232323", // match selected background
+                      }}
+                    >
+                      {db.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No private instances available</option>
+                )}
+              </Select>
+            </Tooltip>
+          </Flex>
+        </Flex>
+
+
+
         <AnalyticsAddressTags
           tags={tags}
           chainName={type === "smartcontract" ? chainName : undefined}
