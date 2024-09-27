@@ -11,11 +11,11 @@ const AnalyticsAddressesListItem = ({
   address,
   idx,
 }: // types,
-{
-  address: any;
-  idx: number;
-  // types: any;
-}) => {
+  {
+    address: any;
+    idx: number;
+    // types: any;
+  }) => {
   // const [type, setType] = useState<{ icon_url?: string }>({});
   const [isShow, setIsShow] = useState(true);
   const [selected, setSelected] = useState(false);
@@ -94,7 +94,13 @@ const AnalyticsAddressesListItem = ({
           <Flex gap="5px" wrap="wrap">
             {address.type === "smartcontract" && <ChainTag name={address.displayName} />}
             {address.tags &&
-              address.tags.map((a: string, idx: number) => <Tag key={idx} name={a} />)}
+              address.tags.map((a: string, idx: number) => {
+                if (a.startsWith("instance_name:")) {
+                  const instanceName = a.split("instance_name:")[1];
+                  return <Tag key={idx} name={instanceName} />;
+                }
+                return <Tag key={idx} name={a} />;
+              })}
           </Flex>
         </Flex>
       )}
