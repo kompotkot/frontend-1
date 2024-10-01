@@ -110,7 +110,7 @@ const AnalyticsNewAddressView = () => {
           color: "#000000",
           abi: JSONForSave,
           // if selectedDatabase is "" then NULL will be sent to the backend
-          customerId: selectedDatabase === "shared" ? undefined : selectedDatabase,
+          customerId: selectedDatabase,
         });
       } catch (e: any) {
         toast(e.message, "error", 7000);
@@ -212,13 +212,7 @@ const AnalyticsNewAddressView = () => {
                 color={selectedDatabase ? "#1A1D22" : "#FFF"}
               >
                 {/* Free shared database option */}
-                <option
-                  key="shared"
-                  value="shared"
-                  style={{ color: "#000", backgroundColor: selectedDatabase === "" ? "#FFF" : "#232323" }}
-                >
-                  Free shared database (API access only)
-                </option>
+                <option value="">Free shared database (API access only)</option>
 
                 {/* Ensure databases.data is defined before mapping */}
                 {databases?.data && databases.data.length > 0 ? (
