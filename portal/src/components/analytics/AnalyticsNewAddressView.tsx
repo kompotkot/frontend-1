@@ -29,7 +29,8 @@ import AnalyticsAddressTags from "./AnalyticsAddressTags";
 const metamaskIcon = `${AWS_ASSETS_PATH_CF}/icons/metamask.png`;
 
 const AnalyticsNewAddressView = () => {
-  const { addresses, setIsCreatingAddress, setSelectedAddressId, blockchains, databases } = useAnalytics();
+  const { addresses, setIsCreatingAddress, setSelectedAddressId, blockchains, databases } =
+    useAnalytics();
   const [address, setAddress] = useState("");
   const [isConnectingMetamask, setIsConnectingMetamask] = useState(false);
   const { account, onConnectWalletClick, web3 } = useContext(Web3Context);
@@ -187,29 +188,25 @@ const AnalyticsNewAddressView = () => {
           )}
         </Flex>
 
-
-
         <Flex direction="column" gap="10px" w="100%">
           <Text variant="label">Select Analytics Database</Text>
-          <Flex
-            wrap="wrap"
-            gap="10px"
-            w="fit-content"
-            pb="5px"
-          >
+          <Flex wrap="wrap" gap="10px" w="fit-content" pb="5px">
             {/* Tooltip around Select so it doesn't interfere with the layout */}
             <Tooltip
               label="This is a shared database accessible via API using predefined queries. You can perform certain SQL queries without direct database access."
               aria-label="Shared database tooltip"
               hasArrow
               placement="right-end"
+              bg={"transparent"}
+              border={"1px solid #a1acbb"}
+              p={"12px"}
+              borderRadius={"12px"}
+              isDisabled={selectedDatabase !== ""}
             >
               <Select
                 value={selectedDatabase} // This should be the state that holds the selected value
                 onChange={(e) => setSelectedDatabase(e.target.value)}
                 borderRadius="10px"
-                bg={selectedDatabase ? "#FFF" : "#232323"}
-                color={selectedDatabase ? "#1A1D22" : "#FFF"}
               >
                 {/* Free shared database option */}
                 <option value="">Free shared database (API access only)</option>
@@ -217,14 +214,7 @@ const AnalyticsNewAddressView = () => {
                 {/* Ensure databases.data is defined before mapping */}
                 {databases?.data && databases.data.length > 0 ? (
                   databases.data.map((db: Database) => (
-                    <option
-                      key={db.id}
-                      value={db.id}
-                      style={{
-                        color: "#000", // dark font color for dropdown options
-                        backgroundColor: selectedDatabase === db.id ? "#FFF" : "#232323", // match selected background
-                      }}
-                    >
+                    <option key={db.id} value={db.id}>
                       {db.name}
                     </option>
                   ))
@@ -235,8 +225,6 @@ const AnalyticsNewAddressView = () => {
             </Tooltip>
           </Flex>
         </Flex>
-
-
 
         <AnalyticsAddressTags
           tags={tags}
