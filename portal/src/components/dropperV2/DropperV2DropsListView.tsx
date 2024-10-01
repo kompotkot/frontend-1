@@ -130,7 +130,7 @@ const DropperV2DropsListView = ({
           </Button>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent bg="transparent" border={"none"} shadow={"none"}>
               <ModalBody w="fit-content">
                 <DropperV2NewDrop
                   address={contractAddress}
