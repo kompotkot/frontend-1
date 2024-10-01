@@ -169,7 +169,6 @@ export const AnalyticsProvider = ({ children }: { children: React.ReactNode }) =
     },
   );
 
-
   const queries = undefined;
 
   const value = {

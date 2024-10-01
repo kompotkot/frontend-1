@@ -154,7 +154,6 @@ interface User {
   web3_address: string | null;
 }
 
-
 interface Credential {
   username: string;
   passwd_resource_id: string | null;

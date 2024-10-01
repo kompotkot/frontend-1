@@ -11,11 +11,11 @@ const AnalyticsAddressesListItem = ({
   address,
   idx,
 }: // types,
-  {
-    address: any;
-    idx: number;
-    // types: any;
-  }) => {
+{
+  address: any;
+  idx: number;
+  // types: any;
+}) => {
   // const [type, setType] = useState<{ icon_url?: string }>({});
   const [isShow, setIsShow] = useState(true);
   const [selected, setSelected] = useState(false);
