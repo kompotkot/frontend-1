@@ -7,9 +7,6 @@ export const getCustomers = () =>
     http({
         method: "GET",
         url: `${MDB_API}/customers`,
-        headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MDB_API_TOKEN}`,
-        },
     });
 
 // Get credentials URI for a specific customer instance
@@ -17,9 +14,6 @@ export const getCustomerCredentialsURI = (customerId: string, instanceId: number
     http({
         method: "GET",
         url: `${MDB_API}/customers/${customerId}/instances/${instanceId}/creds/${role}/url`,
-        headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MDB_API_TOKEN}`,
-        },
     });
 
 // Example usage to get customer credentials

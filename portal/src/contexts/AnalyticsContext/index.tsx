@@ -159,7 +159,7 @@ export const AnalyticsProvider = ({ children }: { children: React.ReactNode }) =
   });
 
   const databases = useQuery(
-    ["databases"],
+    ["databases", user],
     () => {
       return DatabaseService.getCustomers().then((res) => res.data);
     },
