@@ -48,12 +48,14 @@ export const createSubscription =
     label,
     color,
     abi,
+    customerId,
   }: {
     address: string;
     type: string;
     label: string;
     color: string;
     abi?: string;
+    customerId?: string;
   }) => {
     const data = new FormData();
     data.append("address", address);
@@ -62,6 +64,10 @@ export const createSubscription =
     data.append("label", label);
     if (abi) {
       data.append("abi", abi);
+    }
+    // Check if customerId is uuid
+    if (customerId && customerId.length === 36) {
+      data.append("customer_id", customerId);
     }
     return http({
       method: "POST",
