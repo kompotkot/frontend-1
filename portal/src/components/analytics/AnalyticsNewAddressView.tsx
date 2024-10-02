@@ -207,6 +207,11 @@ const AnalyticsNewAddressView = () => {
                 value={selectedDatabase} // This should be the state that holds the selected value
                 onChange={(e) => setSelectedDatabase(e.target.value)}
                 borderRadius="10px"
+                css={{
+                  option: {
+                    color: "black", // Style the options to have black text
+                  },
+                }}
               >
                 {/* Free shared database option */}
                 <option value="">Free shared database (API access only)</option>
