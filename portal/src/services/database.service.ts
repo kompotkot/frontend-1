@@ -1,6 +1,6 @@
 import http from "../utils/httpMoonstream";
 
-const MDB_API = process.env.NEXT_PUBLIC_MDB_API_URL;
+const MDB_API = process.env.NEXT_PUBLIC_MOONSTREAM_DB_V3_CONTROLLER_API;
 
 // Get a list of customers and their database instances
 export const getCustomers = () =>
